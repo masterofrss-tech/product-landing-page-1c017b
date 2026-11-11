@@ -1,0 +1,162 @@
+@import 'tailwindcss' source('../');
+
+/* Kiln — warm paper, hard ink, one hot accent. */
+@theme {
+  --color-paper: #f2ece1;
+  --color-paper-deep: #e8dfcf;
+  --color-ink: #16130f;
+  --color-ink-soft: #4a433a;
+  --color-ember: #e4471b;
+  --color-ember-deep: #b8330f;
+  --color-ash: #8c8275;
+
+  --font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+  --font-sans: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, Menlo, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply m-0 bg-paper font-sans text-ink;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle paper grain over the whole page. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  @apply bg-ember text-paper;
+}
+
+a,
+button,
+input {
+  @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember;
+}
+
+.skip-link {
+  @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[70] focus:bg-ink focus:p-3 focus:text-paper;
+}
+
+.eyebrow {
+  @apply font-mono text-[0.72rem] uppercase tracking-[0.18em];
+}
+
+.serif-accent {
+  @apply font-serif font-normal italic tracking-normal;
+}
+
+/* Load choreography */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.rise {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.slide-in {
+  animation: slide-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.bar-grow {
+  transform-origin: left;
+  animation: grow 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.marquee-track {
+  animation: marquee 38s linear infinite;
+}
+
+.pulse-dot {
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+/* Scroll reveal — toggled by useReveal(). Content stays visible without JS. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .rise,
+  .slide-in,
+  .bar-grow,
+  .marquee-track,
+  .pulse-dot {
+    animation: none;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
